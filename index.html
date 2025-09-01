@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Dashboard</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Roboto:wght@400&display=swap" rel="stylesheet">
+
+<style>
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #f9f9f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.tabs, .brand-buttons {
+  display: flex; flex-wrap: wrap;
+  margin: 10px;
+}
+
+.tab, .brand-btn {
+  padding: 8px 16px;
+  margin: 5px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  cursor: pointer;
+  background: #fff;
+  transition: 0.2s;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.tab.active, .brand-btn.active {
+  background: #333;
+  color: #fff;
+}
+
+.search-box {
+  width: calc(100% - 20px);
+  margin: 10px;
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.model-cards {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card {
+  background: #fff;
+  padding: 12px;
+  border-radius: 5px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.card h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  margin: 0 0 6px 0;
+}
+
+.card p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  margin: 2px 0;
+}
+
+.card .details {
+  display: none;
+  margin-top: 5px;
+}
+
+.card.expanded .details {
+  display: block;
+}
+</style>
+</head>
+<body>
+
+<!-- Category Tabs -->
+<div class="tabs" id="categoryTabs">
+  <div class="tab active" data-category="Mobile">Mobile</div>
+  <div class="tab" data-category="Laptop">Laptop</div>
+  <div class="tab" data-category="Tablet">Tablet</div>
+  <div class="tab" data-category="Watch">Watch</div>
+</div>
+
+<!-- Brand Buttons -->
+<div class="brand-buttons" id="brandButtons"></div>
+
+<!-- Search Box -->
+<input type="text" id="modelSearch" class="search-box" placeholder="Search Model...">
+
+<!-- Model Cards -->
+<div class="model-cards" id="modelCards"></div>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxjW1uDmFPtnW5ak-2KneM0uNgL1C4d7VE97fUmB-2sCpW0KwrdAv88HPzt1JAjqbVJ5A/exec";
+let rawData = [];
+let selectedCategory = "Mobile";
+let selectedBrand = "";
+let expandedCard = null;
+
+// Format numbers
+function formatNumber(num) {
+  return Number(num).toLocaleString('en-IN', {maximumFractionDigits:0});
+}
+function formatMarginPercent(num) {
+  return Number(num).toFixed(2) + '%';
+}
+
+// Fetch data
+async function fetchData() {
+  try {
+    const res = await fetch(WEB_APP_URL);
+    rawData = await res.json();
+    renderBrandButtons();
+    renderModelCards();
+  } catch(err) {
+    document.getElementById("modelCards").innerHTML = `<p style="color:red;">Error loading data: ${err}</p>`;
+  }
+}
+
+// Render Brand Buttons
+function renderBrandButtons() {
+  const brandContainer = document.getElementById("brandButtons");
+  brandContainer.innerHTML = "";
+  const brands = [...new Set(rawData.filter(r => r.Category === selectedCategory).map(r => r.Brand).filter(Boolean))].sort();
+  brands.forEach(b => {
+    const btn = document.createElement("div");
+    btn.className = "brand-btn" + (b === selectedBrand ? " active" : "");
+    btn.textContent = b;
+    btn.onclick = () => {
+      selectedBrand = b;
+      document.querySelectorAll(".brand-btn").forEach(el => el.classList.remove("active"));
+      btn.classList.add("active");
+      renderModelCards();
+    };
+    brandContainer.appendChild(btn);
+  });
+}
+
+// Render Model Cards
+function renderModelCards() {
+  const searchValue = document.getElementById("modelSearch").value.toLowerCase();
+  const container = document.getElementById("modelCards");
+  let filtered = rawData.filter(r => r.Category === selectedCategory);
+  if(selectedBrand) filtered = filtered.filter(r => r.Brand === selectedBrand);
+  if(searchValue) filtered = filtered.filter(r => r.Model.toLowerCase().includes(searchValue));
+
+  container.innerHTML = filtered.map(row => {
+    let marginColor = 'red';
+    if(row.MarginPercent >= 10) marginColor = 'green';
+    else if(row.MarginPercent >= 5) marginColor = 'orange';
+
+    return `
+      <div class="card">
+        <h3>${row.Model || ''}</h3>
+        <p><strong>Selling Price: ₹${formatNumber(row.SellingPrice)}</strong></p>
+        <div class="details">
+          <p>NLC: ₹${formatNumber(row.NLC)}</p>
+          <p style="color:${marginColor}; font-weight:bold;">Margin: ₹${formatNumber(row.Margin)}</p>
+          <p>Margin %: ${formatMarginPercent(row.MarginPercent)}</p>
+        </div>
+      </div>
+    `;
+  }).join('') || "<p>No models found.</p>";
+
+  // Add click events for expansion
+  document.querySelectorAll('.card').forEach(card => {
+    card.onclick = () => {
+      if(expandedCard && expandedCard !== card) expandedCard.classList.remove('expanded');
+      card.classList.toggle('expanded');
+      expandedCard = card.classList.contains('expanded') ? card : null;
+      card.scrollIntoView({behavior: 'smooth', block: 'center'});
+    };
+  });
+}
+
+// Event Listeners
+document.getElementById("modelSearch").addEventListener("input", renderModelCards);
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    selectedCategory = tab.dataset.category;
+    selectedBrand = "";
+    renderBrandButtons();
+    renderModelCards();
+  });
+});
+
+// Initial load
+fetchData();
+setInterval(fetchData, 300000); // auto-refresh every 5 minutes
+</script>
+
+</body>
+</html>
