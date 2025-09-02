@@ -32,11 +32,6 @@
             background-position: right 0.7em top 50%, 0 0;
             background-size: 1.5em auto, 100%;
         }
-        /* Custom styling for select elements */
-        select.custom-select {
-            background-image: url('data:image/svg+xml;utf8,<svg fill="%23D90429" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
-        }
-
         .status-dot {
             height: 10px;
             width: 10px;
@@ -45,34 +40,81 @@
             margin-left: 8px;
             box-shadow: 0 0 5px 2px;
         }
-
         .status-dot.connecting {
             background-color: #3B82F6; /* Blue */
             box-shadow: 0 0 5px 2px rgba(59, 130, 246, 0.7);
         }
-
         .status-dot.connected {
             background-color: #10B981; /* Green */
             box-shadow: 0 0 5px 2px rgba(16, 185, 129, 0.7);
         }
-
         .status-dot.disconnected {
             background-color: #EF4444; /* Red */
             box-shadow: 0 0 5px 2px rgba(239, 68, 68, 0.7);
+        }
+        .dropdown-container {
+            position: relative;
+        }
+        .loading-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+            z-index: 10;
+        }
+        .loading-bar-container {
+            height: 4px;
+            background-color: #E5E7EB;
+            border-radius: 2px;
+            overflow: hidden;
+            width: 90%;
+            margin: 0 auto;
+        }
+        .loading-bar {
+            height: 100%;
+            background-color: #D90429;
+            animation: move-bar 1.5s infinite linear;
+        }
+        @keyframes move-bar {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
         }
     </style>
 </head>
 <body class="bg-gray-100">
 
-    <!-- Fixed Header for Logo -->
-    <header id="logo-header" class="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg p-2 transition-all duration-300">
+    <!-- Header for Logo -->
+    <header id="logo-header" class="w-full bg-white shadow-lg p-2 transition-all duration-300">
         <div class="max-w-7xl mx-auto flex justify-center items-center px-4">
             <img src="https://skmobile.in/wp-content/uploads/2024/01/skweblogo.webp" alt="SK Mobile Logo" class="w-auto h-auto max-h-12 max-w-[200px] transition-transform duration-300 hover:scale-110">
         </div>
     </header>
 
+    <!-- App Header -->
+    <header id="app-header" class="w-full bg-white shadow-md p-4 transition-all duration-300 hidden">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center px-4">
+            <div class="flex flex-col mb-2 sm:mb-0">
+                <h1 class="text-xl sm:text-2xl font-extrabold text-[#4A4A4A]">SK MOBILE PORTAL</h1>
+                <p class="text-xs sm:text-sm text-gray-500">Price Checker</p>
+            </div>
+            <div class="flex flex-row items-center space-x-2">
+                <span id="user-info" class="text-sm font-semibold text-gray-700"></span>
+                <button id="logout-button" class="px-3 py-1 text-sm text-[#D90429] border border-[#D90429] rounded-full hover:bg-[#B70023] hover:text-white transition duration-300 flex items-center justify-center">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    <span class="hidden sm:inline ml-1">Logout</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+
     <!-- Login Container -->
-    <div id="login-container" class="flex items-center justify-center min-h-screen p-4 pt-20">
+    <div id="login-container" class="flex items-center justify-center min-h-screen p-4 pt-8">
         <div class="bg-white p-6 sm:p-8 md:p-10 rounded-3xl shadow-2xl w-full max-w-sm sm:max-w-md text-center animate-fadeIn text-[#4A4A4A]">
             <!-- Login Content -->
             <h1 class="text-3xl sm:text-4xl font-extrabold text-[#4A4A4A] mb-2">SK MOBILE PORTAL</h1>
@@ -90,45 +132,43 @@
     </div>
 
     <!-- Main App Container (Initially hidden) -->
-    <div id="app-container" class="hidden w-full max-w-5xl mx-auto p-4 sm:p-6 md:p-8 pt-24">
-        
-        <!-- App Header with title and user info -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-            <div class="flex flex-col mb-4 sm:mb-0">
-                <h1 class="text-2xl sm:text-3xl font-extrabold text-[#4A4A4A]">SK MOBILE PORTAL</h1>
-                <p class="text-xs sm:text-sm text-gray-500">Price Checker</p>
-            </div>
-            <div class="flex flex-row items-center space-x-2">
-                <span id="user-info" class="text-sm font-semibold text-gray-700"></span>
-                <button id="logout-button" class="px-3 py-1 text-sm text-[#D90429] border border-[#D90429] rounded-full hover:bg-[#B70023] hover:text-white transition duration-300 flex items-center justify-center">
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                    </svg>
-                    <span class="hidden sm:inline ml-1">Logout</span>
-                </button>
-            </div>
-        </div>
+    <div id="app-container" class="hidden w-full max-w-5xl mx-auto p-4 sm:p-6 md:p-8 mt-4">
         
         <!-- Filters Section -->
         <div class="bg-white p-6 rounded-2xl shadow-lg mb-8">
             <h2 class="text-lg font-bold text-[#4A4A4A] mb-4">Product Selection</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
+                <div class="dropdown-container">
                     <label for="category-select" class="block text-sm font-semibold text-gray-700 mb-2">1. Select Category</label>
-                    <select id="category-select" class="custom-select w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D90429] cursor-pointer bg-white text-[#4A4A4A] transition-shadow duration-200 shadow-sm">
+                    <div id="category-loading-overlay" class="loading-overlay hidden">
+                        <div class="loading-bar-container">
+                            <div class="loading-bar"></div>
+                        </div>
+                    </div>
+                    <select id="category-select" class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D90429] cursor-pointer bg-white text-[#4A4A4A] transition-shadow duration-200 shadow-sm" disabled>
                         <option value="" disabled selected>Select Category</option>
                     </select>
                 </div>
-                <div>
+                <div class="dropdown-container">
                     <label for="brand-select" class="block text-sm font-semibold text-gray-700 mb-2">2. Select Brand</label>
-                    <select id="brand-select" class="custom-select w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D90429] cursor-pointer bg-white text-[#4A4A4A] transition-shadow duration-200 shadow-sm" disabled>
-                        <option value="" disabled selected>Select Brand</option>
+                    <div id="brand-loading-overlay" class="loading-overlay hidden">
+                        <div class="loading-bar-container">
+                            <div class="loading-bar"></div>
+                        </div>
+                    </div>
+                    <select id="brand-select" class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D90429] cursor-pointer bg-white text-[#4A4A4A] transition-shadow duration-200 shadow-sm" disabled>
+                        <option value="" disabled selected>Please select a Category first</option>
                     </select>
                 </div>
-                <div>
+                <div class="dropdown-container">
                     <label for="model-select" class="block text-sm font-semibold text-gray-700 mb-2">3. Select Model</label>
-                    <select id="model-select" class="custom-select w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D90429] cursor-pointer bg-white text-[#4A4A4A] transition-shadow duration-200 shadow-sm" disabled>
-                        <option value="" disabled selected>Select Model</option>
+                    <div id="model-loading-overlay" class="loading-overlay hidden">
+                        <div class="loading-bar-container">
+                            <div class="loading-bar"></div>
+                        </div>
+                    </div>
+                    <select id="model-select" class="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D90429] cursor-pointer bg-white text-[#4A4A4A] transition-shadow duration-200 shadow-sm" disabled>
+                        <option value="" disabled selected>Please select a Brand first</option>
                     </select>
                 </div>
             </div>
@@ -164,6 +204,11 @@
         <p id="result-message" class="text-center text-sm text-[#D90429] mt-6 hidden"></p>
     </div>
 
+    <!-- Footer Text -->
+    <div class="fixed bottom-4 right-4 text-xs text-gray-500">
+        S.K. INFINITRADE PVT LTD.
+    </div>
+
     <script>
         const scriptUrl = 'https://script.google.com/macros/s/AKfycbyg4tWBEVgz84DEJ0Kjs6fVlbTFHugK-9g3eB8KX_5KOXnv6xYlKnL4mJdwJJkeU-lQKg/exec'; // *** IMPORTANT: PASTE YOUR DEPLOYED APPS SCRIPT URL HERE. It needs to be a valid URL with a trailing slash for some fetch requests. ***
 
@@ -180,6 +225,9 @@
         const categorySelect = document.getElementById('category-select');
         const brandSelect = document.getElementById('brand-select');
         const modelSelect = document.getElementById('model-select');
+        const categoryLoadingOverlay = document.getElementById('category-loading-overlay');
+        const brandLoadingOverlay = document.getElementById('brand-loading-overlay');
+        const modelLoadingOverlay = document.getElementById('model-loading-overlay');
         const detailsContainer = document.getElementById('details-container');
         const sellingPriceSpan = document.getElementById('selling-price');
         const nlcSpan = document.getElementById('nlc');
@@ -187,11 +235,15 @@
         const marginPercentSpan = document.getElementById('margin-percent');
         const resultMessage = document.getElementById('result-message');
         const logoHeader = document.getElementById('logo-header');
+        const appHeader = document.getElementById('app-header');
 
         // --- Event Listeners ---
         loginForm.addEventListener('submit', handleLogin);
         logoutButton.addEventListener('click', handleLogout);
-        categorySelect.addEventListener('change', () => fetchBrands(categorySelect.value));
+        categorySelect.addEventListener('change', () => {
+            fetchBrands(categorySelect.value);
+            populateDropdown(modelSelect, [], 'Please select a Brand first');
+        });
         brandSelect.addEventListener('change', () => fetchModels(categorySelect.value, brandSelect.value));
         modelSelect.addEventListener('change', () => fetchDetails(categorySelect.value, brandSelect.value, modelSelect.value));
         
@@ -229,12 +281,14 @@
             loginContainer.classList.remove('hidden');
             appContainer.classList.add('hidden');
             logoHeader.classList.remove('hidden'); 
+            appHeader.classList.add('hidden');
         }
 
         function showAppUI() {
             loginContainer.classList.add('hidden');
             appContainer.classList.remove('hidden');
             logoHeader.classList.remove('hidden'); 
+            appHeader.classList.remove('hidden');
         }
 
         async function handleLogin(e) {
@@ -283,9 +337,10 @@
             showLoginUI();
             loginForm.reset();
             // Reset app state
-            categorySelect.innerHTML = '<option value="" disabled selected>Select Category</option>';
-            brandSelect.innerHTML = '<option value="" disabled selected>Select Brand</option>';
-            modelSelect.innerHTML = '<option value="" disabled selected>Select Model</option>';
+            populateDropdown(categorySelect, [], 'Select Category');
+            populateDropdown(brandSelect, [], 'Please select a Category first');
+            populateDropdown(modelSelect, [], 'Please select a Brand first');
+            categorySelect.disabled = true;
             brandSelect.disabled = true;
             modelSelect.disabled = true;
             detailsContainer.classList.add('hidden');
@@ -306,52 +361,51 @@
         }
 
         async function fetchCategories() {
-            setDropdownLoading(brandSelect, 'Loading Brands...');
-            setDropdownLoading(modelSelect, 'Select Model');
-
+            toggleLoading(categorySelect, true);
             const url = `${scriptUrl}?type=categories`;
             try {
                 const response = await fetch(url);
                 const data = await response.json();
                 populateDropdown(categorySelect, data, "Select Category");
-                brandSelect.disabled = false;
             } catch (error) {
                 console.error('Error fetching categories:', error);
+            } finally {
+                toggleLoading(categorySelect, false);
             }
         }
 
         async function fetchBrands(category) {
-            setDropdownLoading(brandSelect, 'Loading Brands...');
-            setDropdownLoading(modelSelect, 'Select Model');
-            
             detailsContainer.classList.add('hidden');
             resultMessage.classList.add('hidden');
-
+            toggleLoading(brandSelect, true);
+            
             const url = `${scriptUrl}?type=brands&category=${encodeURIComponent(category)}`;
             try {
                 const response = await fetch(url);
                 const data = await response.json();
                 populateDropdown(brandSelect, data, "Select Brand");
-                brandSelect.disabled = false;
-                modelSelect.disabled = false;
+                populateDropdown(modelSelect, [], 'Please select a Brand first');
             } catch (error) {
                 console.error('Error fetching brands:', error);
+            } finally {
+                toggleLoading(brandSelect, false);
             }
         }
 
         async function fetchModels(category, brand) {
-            setDropdownLoading(modelSelect, 'Loading Models...');
             detailsContainer.classList.add('hidden');
             resultMessage.classList.add('hidden');
-
+            toggleLoading(modelSelect, true);
+            
             const url = `${scriptUrl}?type=models&category=${encodeURIComponent(category)}&brand=${encodeURIComponent(brand)}`;
             try {
                 const response = await fetch(url);
                 const data = await response.json();
                 populateDropdown(modelSelect, data, "Select Model");
-                modelSelect.disabled = false;
             } catch (error) {
                 console.error('Error fetching models:', error);
+            } finally {
+                toggleLoading(modelSelect, false);
             }
         }
 
@@ -368,6 +422,7 @@
                     resultMessage.classList.remove('hidden');
                 } else {
                     displayDetails(data);
+                    resultMessage.classList.add('hidden');
                 }
             } catch (error) {
                 console.error('Error fetching details:', error);
@@ -388,9 +443,15 @@
             });
         }
         
-        function setDropdownLoading(selectElement, message) {
-            selectElement.innerHTML = `<option>${message}</option>`;
-            selectElement.disabled = true;
+        function toggleLoading(selectElement, isLoading) {
+            const overlay = document.getElementById(selectElement.id.replace('-select', '-loading-overlay'));
+            if (isLoading) {
+                overlay.classList.remove('hidden');
+                selectElement.disabled = true;
+            } else {
+                overlay.classList.add('hidden');
+                selectElement.disabled = false;
+            }
         }
 
         function displayDetails(details) {
