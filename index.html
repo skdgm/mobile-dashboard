@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Store - Price Checker</title>
+    <title>SK MOBILE PORTAL</title>
+    <link rel="icon" type="image/x-icon" href="https://skmobile.in/favicon.ico">
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Use Inter font -->
@@ -13,9 +14,6 @@
             font-family: 'Inter', sans-serif;
             background-color: #F5F5F5;
             transition: all 0.3s ease-in-out;
-        }
-        .container {
-            max-width: 90%;
         }
         .animate-fadeIn {
             animation: fadeIn 0.5s ease-in-out forwards;
@@ -38,40 +36,75 @@
         select.custom-select {
             background-image: url('data:image/svg+xml;utf8,<svg fill="%23D90429" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
         }
+
+        .status-dot {
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-left: 8px;
+            box-shadow: 0 0 5px 2px;
+        }
+
+        .status-dot.connecting {
+            background-color: #3B82F6; /* Blue */
+            box-shadow: 0 0 5px 2px rgba(59, 130, 246, 0.7);
+        }
+
+        .status-dot.connected {
+            background-color: #10B981; /* Green */
+            box-shadow: 0 0 5px 2px rgba(16, 185, 129, 0.7);
+        }
+
+        .status-dot.disconnected {
+            background-color: #EF4444; /* Red */
+            box-shadow: 0 0 5px 2px rgba(239, 68, 68, 0.7);
+        }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="bg-gray-100">
+
+    <!-- Fixed Header for Logo -->
+    <header id="logo-header" class="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg p-2 transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex justify-center items-center px-4">
+            <img src="https://skmobile.in/wp-content/uploads/2024/01/skweblogo.webp" alt="SK Mobile Logo" class="w-auto h-auto max-h-12 max-w-[200px] transition-transform duration-300 hover:scale-110">
+        </div>
+    </header>
 
     <!-- Login Container -->
-    <div id="login-container" class="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md text-center animate-fadeIn text-[#4A4A4A]">
-        <!-- Company Logo and Name -->
-        <div class="flex flex-col items-center mb-6">
-            <svg class="w-16 h-16 text-[#D90429] mb-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M16 11.25V7.5a.75.75 0 00-1.5 0v3.75a.75.75 0 001.5 0zM12 11.25V7.5a.75.75 0 00-1.5 0v3.75a.75.75 0 001.5 0zM8 11.25V7.5a.75.75 0 00-1.5 0v3.75a.75.75 0 001.5 0zM12 16.5a4.5 4.5 0 100-9 4.5 4.5 0 000 9z" />
-                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM15 11.25a3 3 0 11-6 0 3 3 0 016 0z" clip-rule="evenodd" />
-            </svg>
-            <h1 class="text-4xl font-extrabold text-[#4A4A4A]">My Store</h1>
+    <div id="login-container" class="flex items-center justify-center min-h-screen p-4 pt-20">
+        <div class="bg-white p-6 sm:p-8 md:p-10 rounded-3xl shadow-2xl w-full max-w-sm sm:max-w-md text-center animate-fadeIn text-[#4A4A4A]">
+            <!-- Login Content -->
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-[#4A4A4A] mb-2">SK MOBILE PORTAL</h1>
+            <p class="text-sm text-gray-500 mb-8">Login to view product prices and margins.</p>
+            <form id="login-form" class="space-y-6">
+                <input type="email" id="email" class="w-full px-5 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D90429] transition-colors duration-200 bg-white text-[#4A4A4A]" placeholder="Email" required>
+                <input type="password" id="password" class="w-full px-5 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D90429] transition-colors duration-200 bg-white text-[#4A4A4A]" placeholder="Password" required>
+                <p id="error-message" class="text-sm text-[#D90429] hidden"></p>
+                <button type="submit" class="w-full bg-[#D90429] text-white py-4 rounded-xl font-bold hover:bg-[#B70023] transition duration-300 transform hover:scale-105 shadow-lg">Login</button>
+            </form>
+            <div class="mt-4 flex items-center justify-center text-sm text-gray-500">
+                Server Status: <span id="server-status-dot" class="status-dot connecting"></span>
+            </div>
         </div>
-        <p class="text-sm text-gray-500 mb-8">Login to view product prices and margins.</p>
-        <form id="login-form" class="space-y-6">
-            <input type="email" id="email" class="w-full px-5 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D90429] transition-colors duration-200 bg-white text-[#4A4A4A]" placeholder="Email" required>
-            <input type="password" id="password" class="w-full px-5 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D90429] transition-colors duration-200 bg-white text-[#4A4A4A]" placeholder="Password" required>
-            <p id="error-message" class="text-sm text-[#D90429] hidden"></p>
-            <button type="submit" class="w-full bg-[#D90429] text-white py-4 rounded-xl font-bold hover:bg-[#B70023] transition duration-300 transform hover:scale-105 shadow-lg">Login</button>
-        </form>
     </div>
 
     <!-- Main App Container (Initially hidden) -->
-    <div id="app-container" class="hidden w-full max-w-4xl p-4 sm:p-6 md:p-8 animate-fadeIn">
+    <div id="app-container" class="hidden w-full max-w-5xl mx-auto p-4 sm:p-6 md:p-8 pt-24">
+        
+        <!-- App Header with title and user info -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-            <div class="mb-4 sm:mb-0">
-                <h1 class="text-4xl font-extrabold text-[#4A4A4A]">Price Details</h1>
-                <p class="text-sm text-gray-500">Select a product to see its selling price and margin.</p>
+            <div class="flex flex-col mb-4 sm:mb-0">
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-[#4A4A4A]">SK MOBILE PORTAL</h1>
+                <p class="text-xs sm:text-sm text-gray-500">Price Checker</p>
             </div>
-            <div class="flex flex-col items-end sm:flex-row sm:items-center sm:space-x-4">
-                <span id="user-info" class="text-sm font-semibold text-gray-700 mb-2 sm:mb-0"></span>
-                <button id="logout-button" class="px-5 py-2 text-sm text-[#D90429] border border-[#D90429] rounded-full hover:bg-[#B70023] hover:text-white transition duration-300">
-                    Logout
+            <div class="flex flex-row items-center space-x-2">
+                <span id="user-info" class="text-sm font-semibold text-gray-700"></span>
+                <button id="logout-button" class="px-3 py-1 text-sm text-[#D90429] border border-[#D90429] rounded-full hover:bg-[#B70023] hover:text-white transition duration-300 flex items-center justify-center">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    <span class="hidden sm:inline ml-1">Logout</span>
                 </button>
             </div>
         </div>
@@ -107,22 +140,22 @@
                 <!-- Selling Price Card -->
                 <div class="bg-white p-6 rounded-2xl shadow-lg border-l-4 border-[#D90429]">
                     <h2 class="text-lg font-bold text-[#4A4A4A] mb-2">Selling Price</h2>
-                    <p id="selling-price" class="text-5xl font-extrabold text-[#D90429]"></p>
+                    <p id="selling-price" class="text-4xl sm:text-5xl font-extrabold text-[#D90429] whitespace-nowrap overflow-hidden text-ellipsis"></p>
                 </div>
 
                 <!-- Other Details Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-white p-6 rounded-2xl shadow-lg text-[#4A4A4A]">
                         <span class="text-sm font-medium text-gray-500 block mb-1">NLC (Net Landed Cost):</span>
-                        <p id="nlc" class="text-2xl font-semibold"></p>
+                        <p id="nlc" class="text-xl sm:text-2xl font-semibold"></p>
                     </div>
                     <div class="bg-white p-6 rounded-2xl shadow-lg text-[#4A4A4A]">
                         <span class="text-sm font-medium text-gray-500 block mb-1">Margin:</span>
-                        <p id="margin" class="text-2xl font-semibold"></p>
+                        <p id="margin" class="text-xl sm:text-2xl font-semibold"></p>
                     </div>
                     <div class="bg-white p-6 rounded-2xl shadow-lg text-[#4A4A4A]">
                         <span class="text-sm font-medium text-gray-500 block mb-1">Margin %:</span>
-                        <p id="margin-percent" class="text-2xl font-semibold"></p>
+                        <p id="margin-percent" class="text-xl sm:text-2xl font-semibold"></p>
                     </div>
                 </div>
             </div>
@@ -132,7 +165,7 @@
     </div>
 
     <script>
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbyg4tWBEVgz84DEJ0Kjs6fVlbTFHugK-9g3eB8KX_5KOXnv6xYlKnL4mJdwJJkeU-lQKg/exec'; // *** IMPORTANT: PASTE YOUR DEPLOYED APPS SCRIPT URL HERE ***
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbyg4tWBEVgz84DEJ0Kjs6fVlbTFHugK-9g3eB8KX_5KOXnv6xYlKnL4mJdwJJkeU-lQKg/exec'; // *** IMPORTANT: PASTE YOUR DEPLOYED APPS SCRIPT URL HERE. It needs to be a valid URL with a trailing slash for some fetch requests. ***
 
         // --- DOM Elements ---
         const loginContainer = document.getElementById('login-container');
@@ -140,6 +173,7 @@
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         const errorMessage = document.getElementById('error-message');
+        const serverStatusDot = document.getElementById('server-status-dot');
         const appContainer = document.getElementById('app-container');
         const logoutButton = document.getElementById('logout-button');
         const userInfoSpan = document.getElementById('user-info');
@@ -152,6 +186,7 @@
         const marginSpan = document.getElementById('margin');
         const marginPercentSpan = document.getElementById('margin-percent');
         const resultMessage = document.getElementById('result-message');
+        const logoHeader = document.getElementById('logo-header');
 
         // --- Event Listeners ---
         loginForm.addEventListener('submit', handleLogin);
@@ -163,19 +198,50 @@
         window.onload = checkSession;
 
         // --- Functions ---
+        async function checkServerStatus() {
+            try {
+                const response = await fetch(`${scriptUrl}?type=status`);
+                if (response.ok) {
+                    serverStatusDot.classList.remove('connecting', 'disconnected');
+                    serverStatusDot.classList.add('connected');
+                } else {
+                    serverStatusDot.classList.remove('connecting', 'connected');
+                    serverStatusDot.classList.add('disconnected');
+                }
+            } catch (error) {
+                serverStatusDot.classList.remove('connecting', 'connected');
+                serverStatusDot.classList.add('disconnected');
+            }
+        }
 
         function checkSession() {
+            checkServerStatus();
             if (localStorage.getItem('isLoggedIn') === 'true') {
-                loginContainer.classList.add('hidden');
-                appContainer.classList.remove('hidden');
+                showAppUI();
                 fetchCategories();
                 displayUserInfo();
+            } else {
+                showLoginUI();
             }
         }
         
+        function showLoginUI() {
+            loginContainer.classList.remove('hidden');
+            appContainer.classList.add('hidden');
+            logoHeader.classList.remove('hidden'); 
+        }
+
+        function showAppUI() {
+            loginContainer.classList.add('hidden');
+            appContainer.classList.remove('hidden');
+            logoHeader.classList.remove('hidden'); 
+        }
+
         async function handleLogin(e) {
             e.preventDefault();
             errorMessage.classList.add('hidden');
+            serverStatusDot.classList.remove('connected', 'disconnected');
+            serverStatusDot.classList.add('connecting');
 
             const email = emailInput.value;
             const password = passwordInput.value;
@@ -185,24 +251,28 @@
 
             try {
                 const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Server returned status: ${response.status}`);
+                }
                 const data = await response.json();
                 hideAppLoading();
+                checkServerStatus();
 
                 if (data.success) {
                     localStorage.setItem('isLoggedIn', 'true');
                     localStorage.setItem('userEmail', email); // Store the user email
-                    loginContainer.classList.add('hidden');
-                    appContainer.classList.remove('hidden');
+                    showAppUI();
                     fetchCategories();
                     displayUserInfo();
                 } else {
-                    errorMessage.textContent = 'Invalid email or password.';
+                    errorMessage.textContent = 'Invalid email or password. Please check your credentials.';
                     errorMessage.classList.remove('hidden');
                 }
             } catch (error) {
                 console.error('Login error:', error);
                 hideAppLoading();
-                errorMessage.textContent = 'An error occurred. Please try again later.';
+                checkServerStatus();
+                errorMessage.textContent = 'Failed to connect to the server. Please check your internet connection or the Apps Script URL.';
                 errorMessage.classList.remove('hidden');
             }
         }
@@ -210,8 +280,7 @@
         function handleLogout() {
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('userEmail'); // Clear the email
-            appContainer.classList.add('hidden');
-            loginContainer.classList.remove('hidden');
+            showLoginUI();
             loginForm.reset();
             // Reset app state
             categorySelect.innerHTML = '<option value="" disabled selected>Select Category</option>';
@@ -221,6 +290,7 @@
             modelSelect.disabled = true;
             detailsContainer.classList.add('hidden');
             resultMessage.classList.add('hidden');
+            checkServerStatus();
         }
 
         function displayUserInfo() {
@@ -329,7 +399,19 @@
                 maximumFractionDigits: 2
             });
 
-            sellingPriceSpan.textContent = `₹ ${formatNumber(details.SellingPrice)}`;
+            // Adjust font size based on the length of the formatted number
+            const formattedPrice = `₹ ${formatNumber(details.SellingPrice)}`;
+            const priceElement = document.getElementById('selling-price');
+            priceElement.textContent = formattedPrice;
+
+            if (formattedPrice.length > 12) {
+                priceElement.classList.remove('sm:text-5xl');
+                priceElement.classList.add('sm:text-4xl');
+            } else {
+                priceElement.classList.remove('sm:text-4xl');
+                priceElement.classList.add('sm:text-5xl');
+            }
+
             nlcSpan.textContent = `₹ ${formatNumber(details.NLC)}`;
             marginSpan.textContent = `₹ ${formatNumber(details.Margin)}`;
             marginPercentSpan.textContent = `${parseFloat(details.MarginPercent).toFixed(2)} %`;
