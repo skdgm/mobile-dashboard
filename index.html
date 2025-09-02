@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Store Price Checker</title>
+    <title>My Store - Price Checker</title>
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Use Inter font -->
@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6;
+            background-color: #F5F5F5;
             transition: all 0.3s ease-in-out;
         }
         .container {
@@ -29,88 +29,106 @@
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23D90429" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
             background-repeat: no-repeat;
             background-position: right 0.7em top 50%, 0 0;
             background-size: 1.5em auto, 100%;
+        }
+        /* Custom styling for select elements */
+        select.custom-select {
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23D90429" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
         }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
 
-    <!-- Loading Spinner -->
-    <div id="loading" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-50 flex items-center justify-center">
-        <svg class="animate-spin h-10 w-10 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-    </div>
-
     <!-- Login Container -->
-    <div id="login-container" class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md text-center animate-fadeIn">
-        <h1 class="text-3xl font-bold mb-6 text-gray-800">Store Price Checker</h1>
-        <form id="login-form" class="space-y-4">
-            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Email" required>
-            <input type="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Password" required>
-            <p id="error-message" class="text-sm text-red-500 hidden"></p>
-            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">Login</button>
+    <div id="login-container" class="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md text-center animate-fadeIn text-[#4A4A4A]">
+        <!-- Company Logo and Name -->
+        <div class="flex flex-col items-center mb-6">
+            <svg class="w-16 h-16 text-[#D90429] mb-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 11.25V7.5a.75.75 0 00-1.5 0v3.75a.75.75 0 001.5 0zM12 11.25V7.5a.75.75 0 00-1.5 0v3.75a.75.75 0 001.5 0zM8 11.25V7.5a.75.75 0 00-1.5 0v3.75a.75.75 0 001.5 0zM12 16.5a4.5 4.5 0 100-9 4.5 4.5 0 000 9z" />
+                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM15 11.25a3 3 0 11-6 0 3 3 0 016 0z" clip-rule="evenodd" />
+            </svg>
+            <h1 class="text-4xl font-extrabold text-[#4A4A4A]">My Store</h1>
+        </div>
+        <p class="text-sm text-gray-500 mb-8">Login to view product prices and margins.</p>
+        <form id="login-form" class="space-y-6">
+            <input type="email" id="email" class="w-full px-5 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D90429] transition-colors duration-200 bg-white text-[#4A4A4A]" placeholder="Email" required>
+            <input type="password" id="password" class="w-full px-5 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D90429] transition-colors duration-200 bg-white text-[#4A4A4A]" placeholder="Password" required>
+            <p id="error-message" class="text-sm text-[#D90429] hidden"></p>
+            <button type="submit" class="w-full bg-[#D90429] text-white py-4 rounded-xl font-bold hover:bg-[#B70023] transition duration-300 transform hover:scale-105 shadow-lg">Login</button>
         </form>
     </div>
 
     <!-- Main App Container (Initially hidden) -->
-    <div id="app-container" class="hidden bg-white p-8 rounded-2xl shadow-2xl w-full max-w-4xl animate-fadeIn">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold text-gray-800">Price Details</h1>
-            <button id="logout-button" class="text-sm text-blue-600 hover:text-blue-800 transition duration-300">Logout</button>
+    <div id="app-container" class="hidden w-full max-w-4xl p-4 sm:p-6 md:p-8 animate-fadeIn">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+            <div class="mb-4 sm:mb-0">
+                <h1 class="text-4xl font-extrabold text-[#4A4A4A]">Price Details</h1>
+                <p class="text-sm text-gray-500">Select a product to see its selling price and margin.</p>
+            </div>
+            <div class="flex flex-col items-end sm:flex-row sm:items-center sm:space-x-4">
+                <span id="user-info" class="text-sm font-semibold text-gray-700 mb-2 sm:mb-0"></span>
+                <button id="logout-button" class="px-5 py-2 text-sm text-[#D90429] border border-[#D90429] rounded-full hover:bg-[#B70023] hover:text-white transition duration-300">
+                    Logout
+                </button>
+            </div>
         </div>
         
         <!-- Filters Section -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div>
-                <label for="category-select" class="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                <select id="category-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer bg-white">
-                    <option value="" disabled selected>Select Category</option>
-                </select>
-            </div>
-            <div>
-                <label for="brand-select" class="block text-sm font-medium text-gray-700 mb-2">Brand</label>
-                <select id="brand-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer bg-white" disabled>
-                    <option value="" disabled selected>Select Brand</option>
-                </select>
-            </div>
-            <div>
-                <label for="model-select" class="block text-sm font-medium text-gray-700 mb-2">Model</label>
-                <select id="model-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer bg-white" disabled>
-                    <option value="" disabled selected>Select Model</option>
-                </select>
+        <div class="bg-white p-6 rounded-2xl shadow-lg mb-8">
+            <h2 class="text-lg font-bold text-[#4A4A4A] mb-4">Product Selection</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label for="category-select" class="block text-sm font-semibold text-gray-700 mb-2">1. Select Category</label>
+                    <select id="category-select" class="custom-select w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D90429] cursor-pointer bg-white text-[#4A4A4A] transition-shadow duration-200 shadow-sm">
+                        <option value="" disabled selected>Select Category</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="brand-select" class="block text-sm font-semibold text-gray-700 mb-2">2. Select Brand</label>
+                    <select id="brand-select" class="custom-select w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D90429] cursor-pointer bg-white text-[#4A4A4A] transition-shadow duration-200 shadow-sm" disabled>
+                        <option value="" disabled selected>Select Brand</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="model-select" class="block text-sm font-semibold text-gray-700 mb-2">3. Select Model</label>
+                    <select id="model-select" class="custom-select w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D90429] cursor-pointer bg-white text-[#4A4A4A] transition-shadow duration-200 shadow-sm" disabled>
+                        <option value="" disabled selected>Select Model</option>
+                    </select>
+                </div>
             </div>
         </div>
 
         <!-- Details Display -->
         <div id="details-container" class="hidden">
-            <div class="space-y-4">
-                <div class="flex justify-between items-center bg-gray-100 p-4 rounded-lg">
-                    <span class="font-medium text-gray-600">Selling Price:</span>
-                    <span id="selling-price" class="text-2xl font-bold text-blue-600"></span>
+            <div class="space-y-6">
+                <!-- Selling Price Card -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-l-4 border-[#D90429]">
+                    <h2 class="text-lg font-bold text-[#4A4A4A] mb-2">Selling Price</h2>
+                    <p id="selling-price" class="text-5xl font-extrabold text-[#D90429]"></p>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="bg-gray-100 p-4 rounded-lg">
-                        <span class="font-medium text-gray-600">NLC:</span>
-                        <p id="nlc" class="text-xl font-semibold text-gray-800"></p>
+
+                <!-- Other Details Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-lg text-[#4A4A4A]">
+                        <span class="text-sm font-medium text-gray-500 block mb-1">NLC (Net Landed Cost):</span>
+                        <p id="nlc" class="text-2xl font-semibold"></p>
                     </div>
-                    <div class="bg-gray-100 p-4 rounded-lg">
-                        <span class="font-medium text-gray-600">Margin:</span>
-                        <p id="margin" class="text-xl font-semibold text-gray-800"></p>
+                    <div class="bg-white p-6 rounded-2xl shadow-lg text-[#4A4A4A]">
+                        <span class="text-sm font-medium text-gray-500 block mb-1">Margin:</span>
+                        <p id="margin" class="text-2xl font-semibold"></p>
                     </div>
-                    <div class="bg-gray-100 p-4 rounded-lg">
-                        <span class="font-medium text-gray-600">Margin %:</span>
-                        <p id="margin-percent" class="text-xl font-semibold text-gray-800"></p>
+                    <div class="bg-white p-6 rounded-2xl shadow-lg text-[#4A4A4A]">
+                        <span class="text-sm font-medium text-gray-500 block mb-1">Margin %:</span>
+                        <p id="margin-percent" class="text-2xl font-semibold"></p>
                     </div>
                 </div>
             </div>
         </div>
         
-        <p id="result-message" class="text-center text-sm text-gray-500 mt-6 hidden"></p>
+        <p id="result-message" class="text-center text-sm text-[#D90429] mt-6 hidden"></p>
     </div>
 
     <script>
@@ -124,6 +142,7 @@
         const errorMessage = document.getElementById('error-message');
         const appContainer = document.getElementById('app-container');
         const logoutButton = document.getElementById('logout-button');
+        const userInfoSpan = document.getElementById('user-info');
         const categorySelect = document.getElementById('category-select');
         const brandSelect = document.getElementById('brand-select');
         const modelSelect = document.getElementById('model-select');
@@ -133,7 +152,6 @@
         const marginSpan = document.getElementById('margin');
         const marginPercentSpan = document.getElementById('margin-percent');
         const resultMessage = document.getElementById('result-message');
-        const loadingSpinner = document.getElementById('loading');
 
         // --- Event Listeners ---
         loginForm.addEventListener('submit', handleLogin);
@@ -151,35 +169,39 @@
                 loginContainer.classList.add('hidden');
                 appContainer.classList.remove('hidden');
                 fetchCategories();
+                displayUserInfo();
             }
         }
         
         async function handleLogin(e) {
             e.preventDefault();
-            showLoading();
             errorMessage.classList.add('hidden');
 
             const email = emailInput.value;
             const password = passwordInput.value;
             const url = `${scriptUrl}?type=checkLogin&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+            
+            showAppLoading();
 
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-                hideLoading();
+                hideAppLoading();
 
                 if (data.success) {
                     localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userEmail', email); // Store the user email
                     loginContainer.classList.add('hidden');
                     appContainer.classList.remove('hidden');
                     fetchCategories();
+                    displayUserInfo();
                 } else {
                     errorMessage.textContent = 'Invalid email or password.';
                     errorMessage.classList.remove('hidden');
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                hideLoading();
+                hideAppLoading();
                 errorMessage.textContent = 'An error occurred. Please try again later.';
                 errorMessage.classList.remove('hidden');
             }
@@ -187,6 +209,7 @@
 
         function handleLogout() {
             localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail'); // Clear the email
             appContainer.classList.add('hidden');
             loginContainer.classList.remove('hidden');
             loginForm.reset();
@@ -200,63 +223,75 @@
             resultMessage.classList.add('hidden');
         }
 
+        function displayUserInfo() {
+            const userEmail = localStorage.getItem('userEmail');
+            if (userEmail) {
+                let displayName = userEmail;
+                const pattern = '.skpvtltd@gmail.com';
+                if (userEmail.endsWith(pattern)) {
+                    displayName = userEmail.substring(0, userEmail.length - pattern.length);
+                }
+                userInfoSpan.textContent = `Hello, ${displayName}!`;
+            }
+        }
+
         async function fetchCategories() {
-            showLoading();
+            setDropdownLoading(brandSelect, 'Loading Brands...');
+            setDropdownLoading(modelSelect, 'Select Model');
+
             const url = `${scriptUrl}?type=categories`;
             try {
                 const response = await fetch(url);
                 const data = await response.json();
                 populateDropdown(categorySelect, data, "Select Category");
-                hideLoading();
+                brandSelect.disabled = false;
             } catch (error) {
                 console.error('Error fetching categories:', error);
-                hideLoading();
             }
         }
 
         async function fetchBrands(category) {
-            showLoading();
-            modelSelect.innerHTML = '<option value="" disabled selected>Select Model</option>';
+            setDropdownLoading(brandSelect, 'Loading Brands...');
+            setDropdownLoading(modelSelect, 'Select Model');
+            
             detailsContainer.classList.add('hidden');
             resultMessage.classList.add('hidden');
+
             const url = `${scriptUrl}?type=brands&category=${encodeURIComponent(category)}`;
             try {
                 const response = await fetch(url);
                 const data = await response.json();
                 populateDropdown(brandSelect, data, "Select Brand");
                 brandSelect.disabled = false;
-                modelSelect.disabled = true;
-                hideLoading();
+                modelSelect.disabled = false;
             } catch (error) {
                 console.error('Error fetching brands:', error);
-                hideLoading();
             }
         }
 
         async function fetchModels(category, brand) {
-            showLoading();
+            setDropdownLoading(modelSelect, 'Loading Models...');
             detailsContainer.classList.add('hidden');
             resultMessage.classList.add('hidden');
+
             const url = `${scriptUrl}?type=models&category=${encodeURIComponent(category)}&brand=${encodeURIComponent(brand)}`;
             try {
                 const response = await fetch(url);
                 const data = await response.json();
                 populateDropdown(modelSelect, data, "Select Model");
                 modelSelect.disabled = false;
-                hideLoading();
             } catch (error) {
                 console.error('Error fetching models:', error);
-                hideLoading();
             }
         }
 
         async function fetchDetails(category, brand, model) {
-            showLoading();
             const url = `${scriptUrl}?type=details&category=${encodeURIComponent(category)}&brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`;
+            showAppLoading();
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-                hideLoading();
+                hideAppLoading();
                 if (data.error) {
                     detailsContainer.classList.add('hidden');
                     resultMessage.textContent = data.error;
@@ -266,11 +301,11 @@
                 }
             } catch (error) {
                 console.error('Error fetching details:', error);
-                hideLoading();
+                hideAppLoading();
                 detailsContainer.classList.add('hidden');
                 resultMessage.textContent = 'An error occurred while fetching details.';
                 resultMessage.classList.remove('hidden');
-            }
+                }
         }
         
         function populateDropdown(selectElement, items, placeholderText) {
@@ -282,24 +317,43 @@
                 selectElement.appendChild(option);
             });
         }
+        
+        function setDropdownLoading(selectElement, message) {
+            selectElement.innerHTML = `<option>${message}</option>`;
+            selectElement.disabled = true;
+        }
 
         function displayDetails(details) {
-            sellingPriceSpan.textContent = `₹ ${details.SellingPrice.toLocaleString('en-IN')}`;
-            nlcSpan.textContent = `₹ ${details.NLC.toLocaleString('en-IN')}`;
-            marginSpan.textContent = `₹ ${details.Margin.toLocaleString('en-IN')}`;
-            marginPercentSpan.textContent = `${details.MarginPercent} %`;
+            const formatNumber = (num) => parseFloat(num).toLocaleString('en-IN', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            sellingPriceSpan.textContent = `₹ ${formatNumber(details.SellingPrice)}`;
+            nlcSpan.textContent = `₹ ${formatNumber(details.NLC)}`;
+            marginSpan.textContent = `₹ ${formatNumber(details.Margin)}`;
+            marginPercentSpan.textContent = `${parseFloat(details.MarginPercent).toFixed(2)} %`;
             detailsContainer.classList.remove('hidden');
             resultMessage.classList.add('hidden');
         }
-        
-        function showLoading() {
-            loadingSpinner.classList.remove('hidden');
+
+        // Full-page spinner functions, kept for login/logout
+        function showAppLoading() {
+            document.body.classList.add('overflow-hidden');
+            const spinner = document.createElement('div');
+            spinner.id = 'loading';
+            spinner.className = 'fixed inset-0 bg-gray-500 bg-opacity-50 z-50 flex items-center justify-center';
+            spinner.innerHTML = `<svg class="animate-spin h-10 w-10 text-[#D90429]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>`;
+            document.body.appendChild(spinner);
         }
 
-        function hideLoading() {
-            loadingSpinner.classList.add('hidden');
+        function hideAppLoading() {
+            document.body.classList.remove('overflow-hidden');
+            const spinner = document.getElementById('loading');
+            if (spinner) {
+                spinner.remove();
+            }
         }
-
     </script>
 </body>
 </html>
