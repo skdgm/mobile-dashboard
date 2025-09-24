@@ -475,7 +475,7 @@
 
             nlcSpan.textContent = `₹ ${formatNumber(details.NLC)}`;
             marginSpan.textContent = `₹ ${formatNumber(details.Margin)}`;
-            marginPercentSpan.textContent = Number(details.MarginPercent).toFixed(1) + " %";
+            marginPercentSpan.textContent = (Number(details.MarginPercent) * 100).toFixed(1) + " %";
             detailsContainer.classList.remove('hidden');
             resultMessage.classList.add('hidden');
         }
